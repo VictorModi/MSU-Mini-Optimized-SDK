@@ -20,21 +20,19 @@ class MSUMiniDevice:
             self.ser = Serial(self.port, self.baud_rate, timeout=SERIAL_TIMEOUT)
             self.ser.write(DEVICE_INITIAL_COMMAND)
             time.sleep(.1)
-            self.ser.reset_input_buffer()
-            self.ser.reset_output_buffer()
         elif not self.ser.is_open:
             self.ser.open()
+        self.ser.reset_input_buffer()
+        self.ser.reset_output_buffer()
 
     def send(self, data: bytes) -> int:
         """
         发送数据到串口，并返回设备的响应。
 
         :param data: 要发送的字节数据
-        :return: 设备返回的字节数据
+        :return: 发送的字节数
         """
         self._open_serial()
-        self.ser.reset_input_buffer()
-        self.ser.reset_output_buffer()
         if self.ser is None or not self.ser.is_open:
             raise SerialException(f"{self.port} is not exist or not open")
         return self.ser.write(data)

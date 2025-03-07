@@ -63,7 +63,6 @@ class CommandController:
 
         :param width: 屏幕的宽度（默认值为 DEFAULT_WIDTH）。
         :param height: 屏幕的高度（默认值为 DEFAULT_HEIGHT）。
-        :return: 设置是否成功，返回 True 或 False。
         """
         data: bytes = bytes([2, 1, width // 256, width % 256, height // 256, height % 256])
         await self.send(data)
@@ -73,8 +72,7 @@ class CommandController:
         设置 LCD 的起始位置（X 和 Y 坐标）。
 
         :param x: 起始位置的 X 坐标。
-        :param y: 起始位置的 Y 坐标。
-        :return: 设置是否成功，返回 True 或 False。
+        :param y: 起始位置的 Y 坐标。。
         """
         data: bytes = bytes([2, 0, x // 256, x % 256, y // 256, y % 256])
         await self.send(data)
