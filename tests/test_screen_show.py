@@ -16,6 +16,7 @@ def random_str(length: int) -> str:
 class TestScreenShow(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.controller: CommandController = CommandController(find_msu_mini_devices())
+        self.assertTrue(self.controller.devices, "No device, please check if the device is connected")
 
     async def test_show_random_string(self):
         image = Image.new("RGB", (DEFAULT_WIDTH, DEFAULT_HEIGHT))
