@@ -1,3 +1,4 @@
-/.idea
-/__pycache__
-shownasip.py
+**/.idea/
+**/__pycache__/
+**/shownasip.py
+**/4fun/
