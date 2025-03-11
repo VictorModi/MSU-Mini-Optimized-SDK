@@ -21,7 +21,12 @@ class TestScreenShow(unittest.IsolatedAsyncioTestCase):
         image = Image.new("RGB", (DEFAULT_WIDTH, DEFAULT_HEIGHT))
         font = ImageFont.truetype("arial.ttf", 12)
         draw = ImageDraw.Draw(image)
-        draw.text((0, 0), random_str(16), fill=(255, 255, 0), font=font, align="center")
+        draw.text(
+            (0, 0),
+            f"{random_str(32)}\n{random_str(32)}\n{random_str(32)}\n{random_str(32)}\n{random_str(32)}",
+            fill=(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+            font=font
+        )
         image.show()
         data = image_to_screen(image)
         await self.controller.send(data)
@@ -29,7 +34,7 @@ class TestScreenShow(unittest.IsolatedAsyncioTestCase):
     async def asyncTearDown(self):
         for device in self.controller.devices:
             device.close()
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
 
 
 if __name__ == '__main__':

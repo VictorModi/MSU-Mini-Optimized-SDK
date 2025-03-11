@@ -35,7 +35,7 @@ def _scan_port(port_name: str, baud_rate: int) -> Optional[MSUMiniDevice]:
 
 
 def _get_device_port_name(device_name: str) -> str:
-    if sys.platform.startswith("win"):
+    if sys.platform.startswith("win") or "/dev/" in device_name:
         return device_name
     else:
         return f"/dev/{device_name}"
@@ -52,11 +52,9 @@ def find_msu_mini_device(baud_rate: int = DEFAULT_BAUD_RATE) -> Optional[MSUMini
 
     for info in devices_list:
         port_name = _get_device_port_name(info.name)
-
         device = _scan_port(port_name, baud_rate)
         if device:
             return device
-
     return None
 
 
@@ -72,15 +70,10 @@ def find_msu_mini_devices(baud_rate: int = DEFAULT_BAUD_RATE) -> List:
     result: List[MSUMiniDevice] = []
 
     for info in devices_list:
-        if sys.platform.startswith("win"):
-            port_name = info.device
-        else:
-            port_name = f"/dev/{info.device}"
-
+        port_name = _get_device_port_name(info.name)
         device = _scan_port(port_name, baud_rate)
         if device:
             result.append(device)
-
     return result
 
 
