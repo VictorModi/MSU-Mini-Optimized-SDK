@@ -38,11 +38,10 @@ class CommandController:
         :param recv_list: 设备响应数据列表。
         :return: 如果所有响应的数据以期望的前缀开头，返回 True，否则返回 False。
         """
-        print(recv_list)
         for recv in recv_list:
             if len(recv) != 0:
                 if recv[0] != data[0] or recv[1] != data[1]:
-                    raise AssertionError(f"{data} != {recv}")
+                    return False
         return True
 
     async def set_lcd_direction(self, reverse: bool = False) -> bool:

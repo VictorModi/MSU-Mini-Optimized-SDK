@@ -4,6 +4,7 @@ import sys
 import time
 from typing import Optional
 
+from PIL import Image
 from serial import Serial
 from serial.serialutil import SerialException
 
@@ -83,7 +84,7 @@ def find_msu_mini_devices(baud_rate: int = DEFAULT_BAUD_RATE) -> List:
     return result
 
 
-def image_to_screen(image_data: bytearray, width: int = DEFAULT_WIDTH, height: int = DEFAULT_HEIGHT) -> bytearray:
+def image_to_screen(image: Image.Image, width: int = DEFAULT_WIDTH, height: int = DEFAULT_HEIGHT) -> bytearray:
     """
     处理图像数据，将其转换为适合屏幕显示的字节数组格式。
     参数:
@@ -94,6 +95,7 @@ def image_to_screen(image_data: bytearray, width: int = DEFAULT_WIDTH, height: i
         bytearray: 转换后的字节数组，适用于显示或进一步处理。
     """
     result: bytearray = bytearray()  # 存储处理后的结果
+    image_data: List[int] = convert_to_16bit_rgb(image)
 
     # 计算需要处理的页面数量（每个页面是128字节）
     total_pages = (width * height) // 128
@@ -157,3 +159,11 @@ def process_instruction(instruction: int) -> list[int]:
         (instruction >> 8) & 0xFF,  # 低位字节 1
         instruction & 0xFF  # 低位字节 2
     ]
+
+
+def convert_to_16bit_rgb(image: Image.Image) -> List[int]:
+    result: List[int] = [
+        ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)
+        for r, g, b in image.getdata()
+    ]
+    return result

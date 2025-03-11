@@ -1,14 +1,13 @@
 import asyncio
-import time
 import unittest
-import msumini
-from msumini import CommandController
+
+from msumini import CommandController, find_msu_mini_devices
 
 
 class TestScreenDirection(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self) -> None:
         self.command_controller: CommandController = CommandController(
-            msumini.find_msu_mini_devices()
+            find_msu_mini_devices()
         )
 
     async def test_reverse(self):
@@ -26,7 +25,7 @@ class TestScreenDirection(unittest.IsolatedAsyncioTestCase):
     async def asyncTearDown(self):
         for device in self.command_controller.devices:
             device.close()
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
 
 
 if __name__ == '__main__':
